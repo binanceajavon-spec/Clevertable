@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>RM Clever — Revenue Management IA pour Restaurants</title>
+
+  <!-- Polices Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Sora:wght@700;800&family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+  <style>
+    /* ============================================================
+       RESET + VARIABLES GLOBALES (Design System)
+    ============================================================ */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --blue-primary: #1A6BFF;
+      --blue-dark: #0A3FA8;
+      --blue-light: #E8F0FF;
+      --blue-trustpilot: #1B5FD6;
+      --text-white: #FFFFFF;
+      --text-light: rgba(255, 255, 255, 0.8);
+      --text-dark: #111111;
+      --bg-dark-overlay: rgba(0, 0, 0, 0.55);
+      --font-heading: 'Sora', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+      --radius-btn: 50px;
+      --radius-card: 20px;
+      --transition: 0.25s ease;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: #ffffff;
+      color: var(--text-dark);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    /* ============================================================
+       TOP BAR
+    ============================================================ */
+    .top-bar {
+      background-color: #0d0d0d;
+      padding: 8px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      color: var(--text-light);
+      position: relative;
+      z-index: 20;
+    }
+
+    .top-bar__socials {
+      display: flex;
+      gap: 14px;
+    }
+
+    .top-bar__socials a {
+      color: var(--text-light);
+      font-size: 14px;
+      transition: color var(--transition);
+    }
+
+    .top-bar__socials a:hover {
+      color: var(--blue-primary);
+    }
+
+    .top-bar__contact {
+      display: flex;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .top-bar__contact span {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .top-bar__contact i {
+      color: var(--blue-primary);
+    }
+
+    /* ============================================================
+       NAVBAR STYLES (Version cl2 optimisée)
+    ============================================================ */
+    .navbar {
+      background: #111111;
+      padding: 0 40px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .navbar__logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+
+    .navbar__logo-img {
+      height: 200px;
+      width: auto;
+      display: block;
+    }
+
+    .navbar__links {
+      display: flex;
+      list-style: none;
+      gap: 32px;
+      margin: 0;
+      padding: 0;
+    }
+
+    .navbar__links a {
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.75);
+      transition: color var(--transition);
+    }
+
+    .navbar__links a:hover,
+    .navbar__links a.active {
+      color: var(--text-white);
+    }
+
+    .btn-nav {
+      background: var(--blue-primary);
+      color: var(--text-white);
+      font-family: var(--font-body);
+      font-size: 13.5px;
+      font-weight: 600;
+      padding: 10px 22px;
+      border-radius: var(--radius-btn);
+      border: none;
+      cursor: pointer;
+      transition: background var(--transition), transform var(--transition);
+      white-space: nowrap;
+    }
+
+    .btn-nav:hover {
+      background: var(--blue-dark);
+      transform: translateY(-1px);
+    }
+
+    /* Menu Hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 30px;
+      height: 21px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      z-index: 3000;
+      position: relative;
+    }
+
+    .hamburger span {
+      width: 100%;
+      height: 3px;
+      background-color: white;
+      border-radius: 3px;
+      transition: all 0.3s ease;
+    }
+
+    .hamburger.open span:nth-child(1) {
+      transform: translateY(9px) rotate(45deg);
+    }
+
+    .hamburger.open span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .hamburger.open span:nth-child(3) {
+      transform: translateY(-9px) rotate(-45deg);
+    }
+
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background: #111111 !important;
+      z-index: 2000 !important;
+      display: flex !important;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.4s ease-in-out;
+      transform: translateY(-100%);
+    }
+
+    .mobile-menu.open {
+      transform: translateY(0);
+    }
+
+    .mobile-menu__links {
+      list-style: none;
+      text-align: center;
+      padding: 0;
+      margin: 0 0 30px 0;
+    }
+
+    .mobile-menu__links li {
+      margin: 20px 0;
+    }
+
+    .mobile-menu__links a {
+      color: white;
+      font-size: 1.5rem;
+      text-decoration: none;
+      transition: color 0.2s ease;
+      font-weight: 500;
+    }
+
+    .mobile-menu__links a:hover {
+      color: var(--blue-primary);
+    }
+
+    .mobile-menu .btn-nav {
+      margin-top: 20px;
+      width: auto;
+      padding: 14px 32px;
+      font-size: 1rem;
+    }
+
+    .mobile-menu-close {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      background: rgba(255,255,255,0.1);
+      border: none;
+      width: 44px;
+      height: 44px;
+      border-radius: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s;
+      z-index: 2010;
+    }
+
+    .mobile-menu-close i {
+      font-size: 24px;
+      color: white;
+    }
+
+    .mobile-menu-close:hover {
+      background: rgba(255,255,255,0.2);
+    }
+
+    /* ============================================================
+       HERO VIDEO SECTION
+    ============================================================ */
+    .hero-video-section {
+      position: relative;
+      width: 100%;
+      min-height: 85vh;
+      overflow: hidden;
+      background-color: #000;
+    }
+
+    .hero__video-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .hero__video-bg video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      display: block;
+    }
+
+    .hero__video-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 20% 30%, rgba(0,0,0,0.55), rgba(0,0,0,0.75));
+      z-index: 2;
+    }
+
+    .hero__container {
+      position: relative;
+      z-index: 10;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      min-height: 85vh;
+      padding: 4rem 5rem 6rem 5rem;
+      gap: 2rem;
+    }
+
+    .hero__content {
+      color: var(--text-white);
+    }
+
+    .hero__title {
+      font-family: var(--font-heading);
+      font-size: clamp(38px, 5vw, 62px);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 24px;
+      letter-spacing: -0.02em;
+    }
+
+    .hero__title .highlight {
+      color: var(--blue-primary);
+    }
+
+    .hero__subtitle {
+      font-size: 16px;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.85);
+      max-width: 500px;
+      margin-bottom: 40px;
+    }
+
+    .hero__cta-group {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--blue-primary);
+      color: var(--text-white);
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 700;
+      padding: 14px 32px;
+      border-radius: var(--radius-btn);
+      border: none;
+      cursor: pointer;
+      transition: all var(--transition);
+      box-shadow: 0 8px 20px rgba(26, 107, 255, 0.35);
+    }
+
+    .btn-primary:hover {
+      background: var(--blue-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(26, 107, 255, 0.5);
+    }
+
+    .btn-outline {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: transparent;
+      color: var(--text-white);
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 13px 28px;
+      border-radius: var(--radius-btn);
+      border: 1.5px solid rgba(255, 255, 255, 0.4);
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .btn-outline i {
+      color: var(--blue-primary);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--blue-primary);
+      background: rgba(26, 107, 255, 0.1);
+    }
+
+    .hero-curve-bottom {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0%;
+      z-index: 15;
+      line-height: 0;
+    }
+
+    .hero-curve-bottom svg {
+      display: block;
+      width: 0%;
+      height: auto;
+    }
+
+    .features-strip {
+      background: #ffffff;
+      padding: 32px 40px;
+      display: flex;
+      justify-content: center;
+      gap: 64px;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 12;
+      box-shadow: 0 -4px 12px rgba(0,0,0,0.02);
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-dark);
+      line-height: 1.35;
+    }
+
+    .feature-item__icon {
+      width: 32px;
+      height: 32px;
+      background: var(--blue-primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .feature-item__icon i {
+      color: #fff;
+      font-size: 14px;
+    }
+
+    /* Styles pour les cartes */
+    .glass-card { background: rgba(255, 255, 255, 0.98); border: 1px solid rgba(226, 232, 240, 1); box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.05); }
+    .gradient-blue { background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); }
+    .gradient-dark { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }
+    .gradient-orange { background: linear-gradient(135deg, #4369d1 0%, #5796dd 100%); }
+    .text-gradient { background: linear-gradient(135deg, #1e293b 0%, #2563eb 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hover-lift { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+    .hover-lift:hover { transform: translateY(-4px); box-shadow: 0 25px 40px -12px rgba(0, 0, 0, 0.15); }
+    .fixed-height-card { height: 100%; display: flex; flex-direction: column; min-height: 580px; }
+    .content-flex { flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+    .media-container { height: 180px; width: 100%; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 1rem; }
+    .media-container img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* Responsive */
+    @media (max-width: 950px) {
+      .hero__container { grid-template-columns: 1fr; padding: 3rem 2rem 5rem 2rem; gap: 2rem; }
+      .hero__title { font-size: clamp(30px, 6vw, 48px); }
+    }
+
+    @media (max-width: 768px) {
+      .top-bar { padding: 6px 20px; }
+      .top-bar__contact { display: none; }
+      .navbar { padding: 0 20px; }
+      .navbar__links { display: none; }
+      .hamburger { display: flex; }
+      .hero__container { padding: 2rem 1.5rem 4rem 1.5rem; }
+      .hero__cta-group { flex-direction: column; align-items: stretch; }
+      .btn-primary, .btn-outline { text-align: center; justify-content: center; }
+      .features-strip { gap: 28px; padding: 24px 20px; }
+      .hero-video-section { min-height: 70vh; }
+      .mobile-menu .btn-nav { margin-top: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========== TOP BAR ========== -->
+  <div class="top-bar">
+    <div class="top-bar__socials">
+      <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+      <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+      <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+      <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+    </div>
+    <div class="top-bar__contact">
+      <span><i class="fas fa-location-dot"></i> 12 Rue du Commerce, Paris 75015</span>
+      <span><i class="fas fa-phone"></i> <a href="tel:+33123456789">+33 1 23 45 67 89</a></span>
+    </div>
+  </div>
+
+ 
+  <!-- ========== SECTION HERO VIDEO ========== -->
+  <section class="hero-video-section" aria-label="Hero vidéo revenue management">
+    <div class="hero__video-bg">
+      <video autoplay muted loop playsinline poster="hero.png">
+        <source src="images/hero.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="hero__video-overlay"></div>
+    <div class="hero__container">
+      <div class="hero__content">
+        <h1 class="hero__title">
+          Meilleur Logiciel de<br>
+          <span class="highlight">Revenue</span> Management<br>
+          pour Votre Restaurant.
+        </h1>
+        <p class="hero__subtitle">
+          Optimisez vos revenus, automatisez vos tarifs et prenez
+          les meilleures décisions grâce à l'intelligence artificielle
+          de RM Clever.
+        </p>
+        <div class="hero__cta-group">
+          <button class="btn-primary">Demander une Démo</button>
+          <button class="btn-outline"><i class="fas fa-phone"></i> Appelez le +2250748345939</button>
+        </div>
+      </div>
+    </div>
+    <div class="hero-curve-bottom" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 120" preserveAspectRatio="none">
+        <path fill="#ffffff" fill-opacity="1" d="M0,64L80,69.3C160,75,320,85,480,80C640,75,800,53,960,48C1120,43,1280,53,1360,58.7L1440,64L1440,120L1360,120C1280,120,1120,120,960,120C800,120,640,120,480,120C320,120,160,120,80,120L0,120Z"></path>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ========== FEATURES STRIP ========== -->
+  <div class="features-strip" aria-label="Nos engagements">
+    <div class="feature-item">
+      <div class="feature-item__icon" aria-hidden="true"><i class="fas fa-check"></i></div>
+      <span>Satisfaction Garantie<br>&amp; Engagement Total</span>
+    </div>
+    <div class="feature-item">
+      <div class="feature-item__icon" aria-hidden="true"><i class="fas fa-check"></i></div>
+      <span>Experts Certifiés<br>&amp; Services de Qualité</span>
+    </div>
+    <div class="feature-item">
+      <div class="feature-item__icon" aria-hidden="true"><i class="fas fa-check"></i></div>
+      <span>Données Sécurisées,<br>RGPD Conforme</span>
+    </div>
+  </div>
+
+  <!-- ========== SECTION HEADER IA ========== -->
+  <div class="max-w-7xl mx-auto px-4 md:px-6 py-16 md:py-24">
+    <header class="text-center max-w-4xl mx-auto mb-20">
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-100 mb-6">
+        <span class="relative flex h-2 w-2">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-600"></span>
+        </span>
+        <span class="text-[10px] font-extrabold text-blue-700 uppercase tracking-wider">Piloté par l'IA</span>
+        <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">|</span>
+        <span class="text-[10px] font-extrabold text-blue-700 uppercase tracking-wider">+30% de CA moyen</span>
+      </div>
+      <h1 class="text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-gray-900 mb-6 leading-[1.1]">
+        transformez<br>
+        <span class="text-gradient">votre restaurant en machine à cash</span>
+      </h1>
+      <p class="text-lg md:text-xl text-gray-500 leading-relaxed max-w-2xl mx-auto">
+        Découvrez le premier assistant virtuelle de Revenue Management qui analyse vos données, 
+        anticipe et optimise vos marges en temps réel 24h/7.
+      </p>
+      <div class="flex flex-wrap items-center justify-center gap-4 mt-8">
+        <button class="gradient-blue text-white px-8 py-3 rounded-full font-bold text-sm shadow-lg shadow-blue-500/25 hover:shadow-xl transition-all">🎯 DEMANDER UNE DÉMO</button>
+        <button class="border border-gray-300 bg-white px-8 py-3 rounded-full font-bold text-sm text-gray-700 hover:border-blue-500 hover:text-blue-600 transition-all">📊 VOIR UNE DÉMONSTRATION</button>
+      </div>
+    </header>
+
+<!-- ========== 4 CARTES FONCTIONNALITÉS ========== -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-8">
+  
+  <!-- CARTE 01 — IA PRÉDICTIVE (BLANC) -->
+  <div class="lg:col-span-5 bg-white border border-slate-200 rounded-[0rem] p-8 hover-lift flex flex-col justify-between min-h-[520px]">
+    <div>
+      <div class="flex items-center justify-between mb-6">
+        <div class="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center">
+          <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke-width="1.5"/></svg>
+        </div>
+        <span class="text-xs font-bold text-blue-600 bg-blue-50 px-4 py-1.5 rounded-full uppercase tracking-wider">01 — IA PRÉDICTIVE</span>
+      </div>
+      <h3 class="text-2xl font-extrabold text-gray-900 mb-4 leading-tight">Analysez toutes vos données <br>pour mieux piloter votre futur</h3>
+      <p class="text-gray-600 text-base leading-relaxed mb-8">Importez vos données POS ou Excel. Notre algorithme d'apprentissage automatique détecte les tendances cachées, les pics de fréquentation et les opportunités de marge.</p>
+      
+      <div class="bg-slate-50 border border-slate-100 p-5 rounded-2xl">
+        <div class="flex items-center justify-between mb-4">
+          <span class="text-xs font-bold text-gray-400 uppercase">Fréquentation annuelle</span>
+          <span class="text-xs font-bold text-blue-600 bg-white px-2 py-1 rounded shadow-sm">+23%</span>
+        </div>
+        <div class="relative h-20 w-full">
+          <svg class="w-full h-full" viewBox="0 0 400 70" preserveAspectRatio="none">
+            <polyline points="10,60 80,50 160,55 240,30 320,35 380,10" fill="none" stroke="#000000" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="380" cy="10" r="5" fill="#2563eb"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <a href="analysededonnée.html" class="mt-8 inline-flex items-center gap-2 text-base font-bold text-blue-600 hover:gap-4 transition-all">
+      En savoir plus <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 8l4 4m0 0l-4 4m4-4H3" stroke-width="2" stroke-linecap="round"/></svg>
+    </a>
+  </div>
+
+  <!-- CARTE 02 — MARKETING (BLEU PUR) -->
+  <div class="lg:col-span-7 bg-[#0052FF] rounded-[0rem] p-8 hover-lift relative overflow-hidden flex flex-col justify-between min-h-[520px]">
+    <div class="relative z-10">
+      <div class="flex items-center justify-between mb-6">
+        <div class="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center">
+          <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-width="1.5"/></svg>
+        </div>
+        <span class="text-xs font-bold text-white bg-black/20 px-4 py-1.5 rounded-full border border-white/20">02 — MARKETING INTELLIGENT</span>
+      </div>
+      <h3 class="text-3xl font-extrabold text-white mb-4 leading-tight">Ne dépensez plus un FCFA <br>en publicité inutile</h3>
+      <p class="text-blue-50 text-base leading-relaxed mb-8 max-w-2xl">Clever identifie vos périodes creuses à 14 jours et déclenche automatiquement vos campagnes Ads au bon moment. Présence digitale uniquement quand vous en avez besoin.</p>
+      
+      <div class="grid grid-cols-2 gap-6">
+        <div class="bg-black/10 rounded-2xl p-5 border border-white/10">
+          <span class="text-xs font-bold text-white/70 uppercase block mb-4">Affluence vs Publicité</span>
+          <div class="flex items-end justify-between gap-2 h-20">
+            <div class="flex-1 bg-black/40 rounded-t-md h-[70%]"></div>
+            <div class="flex-1 bg-white rounded-t-md h-[30%]"></div>
+            <div class="flex-1 bg-black/40 rounded-t-md h-[85%]"></div>
+            <div class="flex-1 bg-black/40 rounded-t-md h-[60%]"></div>
+          </div>
+        </div>
+        <div class="bg-white/10 rounded-2xl p-5 border border-white/10 flex flex-col justify-center items-center">
+          <div class="text-4xl font-black text-white">x3.8</div>
+          <div class="text-xs text-white/80 uppercase tracking-widest mt-2 font-bold">ROI Mesuré</div>
+        </div>
+      </div>
+    </div>
+    <a href="ads.html" class="mt-8 relative z-10 inline-flex items-center gap-2 text-base font-bold text-white hover:underline">
+      Optimiser mes dépenses Ads <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 8l4 4m0 0l-4 4m4-4H3" stroke-width="2" stroke-linecap="round"/></svg>
+    </a>
+  </div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+  
+  <!-- CARTE 03 — TEMPS RÉEL (BLANC + IMAGE LIBRE) -->
+  <div class="lg:col-span-5 bg-white border border-slate-200 rounded-[0rem] p-8 hover-lift flex flex-col min-h-[580px]">
+    <div class="flex-grow">
+      <div class="flex items-center justify-between mb-6">
+        <div class="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center"><svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.657 0 3 .895 3 2s-1.343 2-3 2m0-4V6m0 12v-2m0-4V8m0 8v-2" stroke-width="1.5"/></svg></div>
+        <span class="text-xs font-bold text-blue-600 bg-blue-50 px-4 py-1.5 rounded-full uppercase">03 — TEMPS RÉEL</span>
+      </div>
+      <h3 class="text-2xl font-extrabold text-gray-900 mb-4">Optimisation des coûts <br>sur tous vos services</h3>
+      <p class="text-gray-600 text-base leading-relaxed mb-6">Suivez en temps réel la rentabilité par message direct : déjeuner, dîner, brunch. Clever détecte les dérives de coûts et vous alerte instantanément.</p>
+      
+      <div class="w-full h-56 overflow-hidden rounded-2xl mb-6">
+        <img src="images/plat.jpg" alt="Plat" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x600/f8fafc/2563eb?text=Suivi+Rentabilité'">
+      </div>
+    </div>
+    
+    <a href="strategie.html" class="inline-flex items-center gap-2 text-base font-bold text-blue-600 hover:gap-4 transition-all">
+      En savoir plus <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 8l4 4m0 0l-4 4m4-4H3" stroke-width="2" stroke-linecap="round"/></svg>
+    </a>
+  </div>
+
+  <!-- CARTE 04 — SMART PROMOTIONS (BLANC + IMAGE LIBRE) -->
+  <div class="lg:col-span-7 bg-white border border-slate-200 rounded-[0rem] p-8 hover-lift flex flex-col min-h-[580px]">
+    <div class="flex-grow">
+      <div class="flex items-center justify-between mb-6">
+        <div class="w-12 h-12 rounded-0x0 bg-blue-50 flex items-center justify-center"><svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v4a2 2 0 002 2h10a2 2 0 002-2v-4" stroke-width="1.5"/></svg></div>
+        <span class="text-xs font-bold text-blue-600 bg-blue-50 px-4 py-1.5 rounded-full uppercase">04 — SMART PROMOTIONS</span>
+      </div>
+      <h3 class="text-2xl font-extrabold text-gray-900 mb-4">Des stratégies et tendances qui <br>maximisent vos marges</h3>
+      <p class="text-gray-600 text-base leading-relaxed mb-6">Clever conçoit des promotions éprouvées et personnalisées pour remplir vos périodes creuses sans sacrifier votre rentabilité nette.</p>
+      
+      <div class="w-full h-56 overflow-hidden rounded-2xl mb-6">
+        <img src="images/promotion.jpg" alt="Promotion" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x600/f8fafc/2563eb?text=Stratégies+Promos'">
+      </div>
+    </div>
+
+    <a href="AIagent.html" class="inline-flex items-center justify-center gap-3 text-base font-bold text-white bg-[#0052FF] px-8 py-4 rounded-full hover:bg-blue-700 transition-all w-fit shadow-lg shadow-blue-200">
+      Déployer ma stratégie <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 8l4 4m0 0l-4 4m4-4H3" stroke-width="2" stroke-linecap="round"/></svg>
+    </a>
+  </div>
+</div>
+
+
+
+    <!-- ========== SECTION 6 AVANTAGES ========== -->
+    <section class="py-24 bg-white">
+      <div class="max-w-7xl mx-auto px-6">
+        
+        <div class="text-center max-w-3xl mx-auto mb-20">
+          <div class="inline-flex items-center gap-2 px-4 py-1 border border-blue-200 bg-white mb-8">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-600"></span>
+            </span>
+            <span class="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em]">Performance RM Clever</span>
+          </div>
+          <h2 class="text-4xl md:text-6xl font-black tracking-tighter text-gray-900 mb-6 uppercase">
+            Rentabilité Maximale. <br>
+            <span class="text-blue-600">Opérations Fluides.</span>
+          </h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="group p-10 border border-blue-100 bg-white hover:border-blue-600 transition-all duration-300">
+            <div class="mb-8 text-blue-600">
+              <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+            </div>
+            <h3 class="text-lg font-black text-gray-900 mb-4 uppercase tracking-wider">Analyse prédictive</h3>
+            <p class="text-gray-500 text-sm leading-relaxed font-medium">Anticipez l'affluence jusqu'à 14 jours. Clever modélise vos historiques pour sécuriser vos décisions opérationnelles.</p>
+          </div>
+
+          <div class="group p-10 border border-blue-100 bg-white hover:border-blue-600 transition-all duration-300">
+            <div class="mb-8 text-blue-600">
+              <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+            </div>
+            <h3 class="text-lg font-black text-gray-900 mb-4 uppercase tracking-wider">Marketing Intelligent</h3>
+            <p class="text-gray-500 text-sm leading-relaxed font-medium">Ne gaspillez plus un centime. CLEVER identifie vos périodes creuses et déploie automatiquement des promotions ciblées.</p>
+          </div>
+
+          <div class="group p-10 border border-blue-100 bg-white hover:border-blue-600 transition-all duration-300">
+            <div class="mb-8 text-blue-600">
+              <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.657 0 3 .895 3 2s-1.343 2-3 2m0-4V6m0 12v-2m0-4V8m0 8v-2"/></svg>
+            </div>
+            <h3 class="text-lg font-black text-gray-900 mb-4 uppercase tracking-wider">Coûts Temps Réel</h3>
+            <p class="text-gray-500 text-sm leading-relaxed font-medium">Surveillez la rentabilité de chaque plat. Alertes immédiates en cas de dérive des coûts matières.</p>
+          </div>
+
+          <div class="group p-10 border border-blue-100 bg-white hover:border-blue-600 transition-all duration-300">
+            <div class="mb-8 text-blue-600">
+              <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v4a2 2 0 002 2h10a2 2 0 002-2v-4"/></svg>
+            </div>
+            <h3 class="text-lg font-black text-gray-900 mb-4 uppercase tracking-wider">IA Stratégique</h3>
+            <p class="text-gray-500 text-sm leading-relaxed font-medium">Bilan complet et stratégies mensuelles générées automatiquement pour maximiser votre croissance.</p>
+          </div>
+
+          <div class="group p-10 border border-blue-100 bg-white hover:border-blue-600 transition-all duration-300">
+            <div class="mb-8 text-blue-600">
+              <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            </div>
+            <h3 class="text-lg font-black text-gray-900 mb-4 uppercase tracking-wider">Traçabilité</h3>
+            <p class="text-gray-500 text-sm leading-relaxed font-medium">Historique complet de chaque modification pour mesurer l'impact réel de vos choix sur le long terme.</p>
+          </div>
+
+          <div class="group p-10 border border-blue-100 bg-white hover:border-blue-600 transition-all duration-300">
+            <div class="mb-8 text-blue-600">
+              <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            </div>
+            <h3 class="text-lg font-black text-gray-900 mb-4 uppercase tracking-wider">Sync Multi-Services</h3>
+            <p class="text-gray-500 text-sm leading-relaxed font-medium">Vision unifiée : Petit-déjeuner, déjeuner et livraison. Une centralisation parfaite pour votre gestion.</p>
+          </div>
+        </div>
+
+        <div class="text-center mt-20">
+  <a href="avantage.html" class="inline-flex items-center gap-4 bg-blue-600 text-white px-12 py-5 font-black text-sm uppercase tracking-widest hover:bg-black transition-all duration-300">
+    Voir tous les avantages 
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+  </a>
+</div>
+
+
+      </div>
+    </section>
+
+       <!-- ========== SECTION CLEVR — AGENT IA 24/7 ========== -->
+    <div class="max-w-7xl mx-auto px-6 py-24">
+      
+      <!-- Badge centré -->
+      <div class="flex justify-center mb-6">
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-400/30">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+          </span>
+          <span class="text-[11px] font-bold text-blue-400 uppercase tracking-wider">🤖 CLEVR — VOTRE AGENT IA 24/7</span>
+        </div>
+      </div>
+
+      <!-- Titre centré -->
+      <div class="text-center max-w-4xl mx-auto mb-12">
+        <h2 class="text-3xl md:text-5xl lg:text-6xl font-black text-gray-900 leading-tight mb-4">
+          Un copilote IA toujours<br>
+          <span class="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">à vos côtés</span>
+        </h2>
+        <p class="text-gray-600 text-lg md:text-xl max-w-2xl mx-auto">
+          Clevr analyse, anticipe, recommande et alerte. Votre manager virtuel qui travaille 24h/7 pour maximiser votre rentabilité.
+        </p>
+      </div>
+
+      <!-- ILLUSTRATION : Robot IA avec 3 cartes flottantes -->
+      <div class="relative overflow-hidden rounded-3xl mb-10">
+        
+        <div class="relative h-[550px] md:h-[620px] flex items-center justify-center overflow-hidden">
+
+          <!-- Central AI Robot -->
+          <div class="relative z-20">
+            <div class="absolute inset-0 scale-[1.8] bg-blue-500/20 blur-[100px] rounded-full"></div>
+
+            <div class="w-[220px] h-[220px] rounded-full border border-blue-400/30 flex items-center justify-center">
+              <!-- ROBOT -->
+              <div class="relative w-[150px] h-[150px] rounded-full bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center shadow-[0_0_70px_rgba(37,99,235,0.5)]">
+                <!-- Head -->
+                <div class="relative w-[82px] h-[82px] rounded-[28px] bg-white flex items-center justify-center shadow-2xl">
+                  <!-- Eyes -->
+                  <div class="absolute top-[28px] left-[20px] w-[10px] h-[10px] rounded-full bg-blue-600"></div>
+                  <div class="absolute top-[28px] right-[20px] w-[10px] h-[10px] rounded-full bg-blue-600"></div>
+                  <!-- Mouth -->
+                  <div class="absolute bottom-[20px] w-[28px] h-[4px] rounded-full bg-blue-300"></div>
+                  <!-- Antenna -->
+                  <div class="absolute -top-4 left-1/2 -translate-x-1/2">
+                    <div class="w-[2px] h-4 bg-blue-200"></div>
+                    <div class="w-3 h-3 rounded-full bg-blue-400 shadow-[0_0_20px_rgba(96,165,250,0.7)]"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Floating Card 1 : Affluence -->
+          <div class="absolute top-10 left-4 md:left-10 w-[180px] md:w-[210px] border border-gray-100 bg-white shadow-xl rounded-xl p-4">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-[9px] font-black uppercase tracking-[0.2em] text-blue-600">Affluence</span>
+              <i class="fas fa-chart-line text-blue-500 text-xs"></i>
+            </div>
+            <div class="text-2xl font-black text-gray-900 mb-1">+32%</div>
+            <p class="text-[11px] text-gray-500 leading-relaxed">Prévision détectée automatiquement</p>
+          </div>
+
+          <!-- Floating Card 2 : Marketing -->
+          <div class="absolute top-20 right-4 md:right-10 w-[190px] md:w-[220px] border border-gray-100 bg-white shadow-xl rounded-xl p-4">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-[9px] font-black uppercase tracking-[0.2em] text-blue-600">Marketing</span>
+              <i class="fas fa-bullhorn text-green-500 text-xs"></i>
+            </div>
+            <div class="text-base font-black text-gray-900 leading-tight mb-2">Campagne auto lancée</div>
+            <p class="text-[11px] text-gray-500 leading-relaxed">Activation intelligente des Ads</p>
+          </div>
+
+          <!-- Floating Card 3 : Profit Live -->
+          <div class="absolute bottom-12 left-4 md:left-10 w-[190px] md:w-[225px] border border-gray-100 bg-white shadow-xl rounded-xl p-4">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-[9px] font-black uppercase tracking-[0.2em] text-blue-600">Profit Live</span>
+              <i class="fas fa-coins text-yellow-500 text-xs"></i>
+            </div>
+            <div class="text-2xl font-black text-gray-900 mb-1">+18%</div>
+            <p class="text-[11px] text-gray-500 leading-relaxed">Marge optimisée en temps réel</p>
+          </div>
+
+          <!-- Floating Card 4 : Staffing -->
+          <div class="absolute bottom-24 right-4 md:right-10 w-[180px] md:w-[210px] border border-gray-100 bg-white shadow-xl rounded-xl p-4">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-[9px] font-black uppercase tracking-[0.2em] text-blue-600">Staffing</span>
+              <i class="fas fa-users text-purple-500 text-xs"></i>
+            </div>
+            <div class="text-xl font-black text-gray-900 mb-1">+2 Serveurs</div>
+            <p class="text-[11px] text-gray-500 leading-relaxed">Recommandation IA pour vendredi</p>
+          </div>
+
+        </div>
+      </div>
+
+     <!-- CTA centré -->
+<div class="mt-6 flex justify-center">
+  <a href="aiagent.html" class="inline-flex items-center gap-4 bg-blue-600 text-white px-8 py-4 font-black text-xs uppercase tracking-[0.18em] rounded hover:bg-blue-700 transition-all duration-300 shadow-lg shadow-blue-500/25">
+    Découvrir Clevr — L'agent IA
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+      <path d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+    </svg>
+  </a>
+</div>
+
+    </div>
+    
+   
+
+
+
+<!-- ========== PROCESS SECTION ========== -->
+    <section class="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen overflow-hidden bg-[#1e6fd9] py-20 md:py-32 mt-16">
+      <div class="absolute inset-0 opacity-[0.14] pointer-events-none">
+        <div class="absolute inset-0" style="background-image: linear-gradient(to right, rgba(170, 173, 180, 0.55) 1px, transparent 18px), linear-gradient(to bottom, rgba(165, 156, 156, 0.18) 1px, transparent 18px); background-size: 42px 42px;"></div>
+      </div>
+      <div class="absolute top-0 left-0 w-[500px] h-[500px] bg-blue-400/10 rounded-full blur-3xl"></div>
+      <div class="absolute bottom-0 right-0 w-[400px] h-[400px] bg-blue-900/20 rounded-full blur-3xl"></div>
+
+      <div class="relative z-10 max-w-7xl mx-auto px-6 md:px-12">
+        <div class="flex flex-col lg:flex-row items-start gap-16">
+          <div class="lg:w-[32%] text-white pt-2">
+            <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/10 text-[11px] uppercase tracking-[0.2em] font-bold mb-6 backdrop-blur-sm">RM Clever Process</span>
+            <h2 class="text-4xl md:text-6xl font-extrabold leading-[0.95] tracking-tight mb-6">Notre <br>Processus</h2>
+            <p class="text-blue-100 text-lg leading-relaxed max-w-md opacity-90 mb-10">Nous avons développé un processus innovant qui nous permet de comprendre votre activité, vos objectifs et les opportunités cachées de votre restaurant.</p>
+            <a href="process.html" class="inline-flex items-center gap-3 border border-white/20 bg-white/10 backdrop-blur-md text-white px-8 py-4 rounded-full font-bold text-sm uppercase tracking-widest hover:bg-white hover:text-[#1e6fd9] transition-all duration-300">Découvrir <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 8l4 4m0 0l-4 4m4-4H3" stroke-width="2" stroke-linecap="round"/></svg></a>
+          </div>
+
+          <div class="lg:w-[68%] grid grid-cols-1 md:grid-cols-2 gap-5 w-full">
+            <div class="bg-white border border-blue-100 p-8 shadow-[0_10px_40px_rgba(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300">
+              <div class="flex justify-between items-start mb-8"><span class="text-5xl font-black text-blue-100">01.</span><div class="w-14 h-14 bg-blue-50 border border-blue-100 flex items-center justify-center"><i class="fas fa-search text-[#1e6fd9] text-xl"></i></div></div>
+              <h3 class="text-2xl font-extrabold text-gray-900 mb-3">Analyse de données </h3>
+              <p class="text-gray-500 leading-relaxed text-sm md:text-base"> Établir une base claire à partir de l'analyse de vos données et en faire des tendances claires. .</p>
+            </div>
+            <div class="bg-white border border-blue-100 p-8 shadow-[0_10px_40px_rgba(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300">
+              <div class="flex justify-between items-start mb-8"><span class="text-5xl font-black text-blue-100">02.</span><div class="w-14 h-14 bg-blue-50 border border-blue-100 flex items-center justify-center"><i class="fas fa-code text-[#1e6fd9] text-xl"></i></div></div>
+              <h3 class="text-2xl font-extrabold text-gray-900 mb-3"> Exécution </h3>
+              <p class="text-gray-500 leading-relaxed text-sm md:text-base"> Une fois exécuté, nous veillons à ce que le logiciel soit le plus précis pour devenir votre assistant personnel 24h/24  .</p>
+            </div>
+            <div class="bg-white border border-blue-100 p-8 shadow-[0_10px_40px_rgba(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300">
+              <div class="flex justify-between items-start mb-8"><span class="text-5xl font-black text-blue-100">03.</span><div class="w-14 h-14 bg-blue-50 border border-blue-100 flex items-center justify-center"><i class="fas fa-rocket text-[#1e6fd9] text-xl"></i></div></div>
+              <h3 class="text-2xl font-extrabold text-gray-900 mb-3">Implementation</h3>
+              <p class="text-gray-500 leading-relaxed text-sm md:text-base"> Travaillez en étroite collaboration avec votre équipe afin d'enrichir la base de données pour établir le process .</p>
+            </div>
+            <div class="bg-white border border-blue-100 p-8 shadow-[0_10px_40px_rgba(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300">
+              <div class="flex justify-between items-start mb-8"><span class="text-5xl font-black text-blue-100">04.</span><div class="w-14 h-14 bg-blue-50 border border-blue-100 flex items-center justify-center"><i class="fas fa-chart-line text-[#1e6fd9] text-xl"></i></div></div>
+              <h3 class="text-2xl font-extrabold text-gray-900 mb-3">Amelioration</h3>
+              <p class="text-gray-500 leading-relaxed text-sm md:text-base"> L'amélioration dans l'analyse et les suggestions est ce qui fera de Clever votre bras droit, car il apprend constamment  .</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+
+
+
+
+    
+
+    <!-- ========== ENGAGEMENT SECTION ========== -->
+    <div class="max-w-7xl mx-auto px-6 py-24 overflow-hidden">
+      <div class="grid lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+        <div class="lg:col-span-6">
+          <div class="relative group">
+            <div class="absolute -inset-5 rounded-[0px] bg-blue-50 border border-blue-100 shadow-[0_30px_90px_rgba(37,99,235,0.06)]"></div>
+            <div class="absolute -top-12 -left-12 w-56 h-56 bg-blue-100 rounded-full blur-3xl opacity-60"></div>
+            <div class="relative overflow-hidden rounded-[0px]">
+              <img src="images/engagement.jpg" alt="Notre engagement pour votre restaurant" class="w-full h-[520px] md:h-[620px] object-cover transition-transform duration-700 group-hover:scale-[1.03]" onerror="this.src='https://placehold.co/1200x900/2563eb/ffffff?text=engagement.jpg'">
+              <div class="absolute inset-0 bg-gradient-to-t from-slate-900/10 via-transparent to-transparent"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-6">
+          <div class="space-y-8">
+            <div class="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-blue-50 border border-blue-100">
+              <span class="relative flex h-2.5 w-2.5"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-blue-600"></span></span>
+              <span class="text-[11px] font-black uppercase tracking-[0.22em] text-blue-700">Notre Vision</span>
+            </div>
+            <div>
+              <h2 class="text-5xl md:text-6xl font-black tracking-[-0.04em] text-gray-900 leading-[1]">Notre engagement envers<span class="block text-blue-600 mt-3">votre succès</span></h2>
+              <p class="mt-7 text-[16px] text-gray-500 leading-[1.9] max-w-[540px]">L'équipe de RM Clever s'engage quotidiennement à fournir aux restaurateurs les outils technologiques les plus avancés pour transformer chaque table en une opportunité de croissance maximale.</p>
+            </div>
+            <div class="space-y-4">
+              <div class="group flex items-start gap-4 rounded-[0px] border border-slate-100 bg-white px-5 py-5 shadow-[0_8px_30px_rgba(15,23,42,0.04)] hover:shadow-[0_18px_50px_rgba(37,99,235,0.08)] transition-all duration-500">
+                <div class="w-11 h-11 shrink-0 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600"><i class="fas fa-chart-line text-[15px]"></i></div>
+                <div class="pt-0.5"><h4 class="font-black text-gray-900 text-[16px] leading-none mb-2">Maximisation des Revenus</h4><p class="text-[14px] text-gray-500 leading-[1.7] max-w-[420px]">Optimisation constante de vos tarifs selon la demande réelle.</p></div>
+              </div>
+              <div class="group flex items-start gap-4 rounded-[0px] border border-slate-100 bg-white px-5 py-5 shadow-[0_8px_30px_rgba(15,23,42,0.04)] hover:shadow-[0_18px_50px_rgba(37,99,235,0.08)] transition-all duration-500">
+                <div class="w-11 h-11 shrink-0 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600"><i class="fas fa-robot text-[15px]"></i></div>
+                <div class="pt-0.5"><h4 class="font-black text-gray-900 text-[16px] leading-none mb-2">Automatisation Intelligente</h4><p class="text-[14px] text-gray-500 leading-[1.7] max-w-[420px]">Réduction de votre charge mentale via des décisions assistées.</p></div>
+              </div>
+              <div class="group flex items-start gap-4 rounded-[0px] border border-slate-100 bg-white px-5 py-5 shadow-[0_8px_30px_rgba(15,23,42,0.04)] hover:shadow-[0_18px_50px_rgba(37,99,235,0.08)] transition-all duration-500">
+                <div class="w-11 h-11 shrink-0 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600"><i class="fas fa-bullseye text-[15px]"></i></div>
+                <div class="pt-0.5"><h4 class="font-black text-gray-900 text-[16px] leading-none mb-2">Précision Prédictive</h4><p class="text-[14px] text-gray-500 leading-[1.7] max-w-[420px]">Anticipation des besoins en personnel et stocks à 14 jours.</p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== PREFOOTER CTA ========== -->
+    <div class="max-w-7xl mx-auto px-6 py-20">
+      <div class="relative bg-[#1e6fd9] border border-blue-400">
+        <div class="flex flex-col lg:flex-row items-stretch">
+          <div class="lg:w-1/2 p-12 md:p-20 space-y-8">
+            <h2 class="text-4xl md:text-5xl font-black text-white leading-tight uppercase tracking-tighter">Prêt à maximiser <br>vos revenus ?</h2>
+            <p class="text-blue-100 text-lg leading-relaxed font-medium">Réservez une démonstration personnalisée pour découvrir comment l'intelligence artificielle de Clever transforme votre rentabilité dès le premier mois.</p>
+            <div class="pt-4"><a href="#" class="inline-block bg-white text-[#1e6fd9] px-12 py-5 font-black text-sm uppercase tracking-widest hover:bg-black hover:text-white transition-all duration-300">Réserver ma Démo</a></div>
+          </div>
+          <div class="lg:w-1/2 w-full hidden md:block border-l border-blue-400/50">
+            <div class="relative h-full min-h-[450px] overflow-hidden group">
+              <img src="images/prefooter.jpg" alt="Dashboard RM Clever" class="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-1000 group-hover:scale-110" onerror="this.src='https://placehold.co/800x600/1e40af/ffffff?text=prefooter.jpg'">
+              <div class="absolute inset-0 bg-gradient-to-r from-[#1e6fd9] via-transparent to-transparent"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+ <!-- FOOTER -->
+<footer class="bg-black text-white pt-20 pb-10 border-t border-white/10 w-full">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+      
+      <!-- Colonne 1 : Logo + description -->
+      <div class="space-y-6">
+        <div class="flex items-center gap-3">
+          <img src="images/clever.png" alt="RM Clever Logo" class="h-12 w-auto object-contain">
+          <span class="text-2xl font-bold tracking-tight"></span>
+        </div>
+        <p class="text-gray-400 text-sm leading-relaxed">La solution de Revenue Management par IA qui aide les restaurateurs à transformer leurs données en profits.</p>
+        <div class="flex gap-4">
+          <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#1e6fd9] transition-all"><i class="fab fa-linkedin-in text-gray-300 hover:text-white"></i></a>
+          <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#1e6fd9] transition-all"><i class="fab fa-instagram text-gray-300 hover:text-white"></i></a>
+          <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#1e6fd9] transition-all"><i class="fab fa-twitter text-gray-300 hover:text-white"></i></a>
+          <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#1e6fd9] transition-all"><i class="fab fa-facebook-f text-gray-300 hover:text-white"></i></a>
+        </div>
+      </div>
+
+
+
+
+      <!-- Colonne 2 : Navigation -->
+      <div>
+        <h4 class="text-lg font-bold mb-6 border-b border-white/10 pb-2 inline-block">Navigation</h4>
+        <ul class="space-y-4 text-gray-400 text-sm mt-4">
+          <li><a href="#" class="hover:text-[#1e6fd9] transition-colors">Accueil</a></li>
+          <li><a href="#" class="hover:text-[#1e6fd9] transition-colors">Fonctionnalités</a></li>
+          <li><a href="#" class="hover:text-[#1e6fd9] transition-colors">Notre Engagement</a></li>
+          <li><a href="#" class="hover:text-[#1e6fd9] transition-colors">Blog</a></li>
+        </ul>
+      </div>
+
+      <!-- Colonne 3 : Informations légales -->
+      <div>
+        <h4 class="text-lg font-bold mb-6 border-b border-white/10 pb-2 inline-block">Informations</h4>
+        <ul class="space-y-4 text-gray-400 text-sm mt-4">
+          <li><a href="#" class="hover:text-[#1e6fd9] transition-colors">Contact</a></li>
+          <li><a href="#" class="hover:text-[#1e6fd9] transition-colors">Confidentialité</a></li>
+          <li><a href="#" class="hover:text-[#1e6fd9] transition-colors">Mentions Légales</a></li>
+          <li><a href="#" class="hover:text-[#1e6fd9] transition-colors">CGU</a></li>
+        </ul>
+      </div>
+
+      <!-- Colonne 4 : Contact -->
+      <div>
+        <h4 class="text-lg font-bold mb-6 border-b border-white/10 pb-2 inline-block">Contact</h4>
+        <ul class="space-y-4 text-gray-400 text-sm mt-4">
+          <li class="flex items-center gap-2"><i class="fas fa-envelope text-[#1e6fd9] text-xs"></i><a href="mailto:contact@rmclever.ai" class="hover:text-white transition-colors">contact@rmclever.ai</a></li>
+          <li class="flex items-center gap-2"><i class="fas fa-phone text-[#1e6fd9] text-xs"></i><a href="tel:+2250748345939" class="hover:text-white transition-colors">+225 07 48 34 59 39</a></li>
+          <li class="flex items-center gap-2"><span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span><span class="text-gray-400 text-xs">Système Opérationnel</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Bas de footer -->
+    <div class="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-gray-500 text-[11px]">
+      <p>© 2025 RM Clever. Tous droits réservés.</p>
+      <div class="font-bold tracking-[0.2em] uppercase text-[10px]">Powered By <span class="text-white">Axiom Labs</span></div>
+    </div>
+  </div>
+</footer>
+
+
+  <script>
+    // Gestion de la vidéo hero
+    const videoElement = document.querySelector('.hero__video-bg video');
+    if (videoElement) {
+      videoElement.addEventListener('error', function() {
+        const bgContainer = document.querySelector('.hero__video-bg');
+        if (bgContainer) {
+          bgContainer.style.background = "url('hero.png') center center/cover no-repeat";
+          bgContainer.style.backgroundColor = "#0a0f1f";
+          videoElement.style.display = 'none';
+        }
+      });
+      videoElement.play().catch(e => console.log("Autoplay bloqué"));
+    }
+
+    // Gestion du menu hamburger
+    (function() {
+      const hamburgerBtn = document.getElementById('hamburgerBtn');
+      const mobileMenu = document.getElementById('mobileMenu');
+      const closeMenuBtn = document.getElementById('closeMobileMenuBtn');
+
+      function closeMobileMenu() {
+        if (mobileMenu && mobileMenu.classList.contains('open')) {
+          mobileMenu.classList.remove('open');
+          if (hamburgerBtn) hamburgerBtn.classList.remove('open');
+          document.body.style.overflow = '';
+        }
+      }
+
+      function openMobileMenu() {
+        if (mobileMenu && !mobileMenu.classList.contains('open')) {
+          mobileMenu.classList.add('open');
+          if (hamburgerBtn) hamburgerBtn.classList.add('open');
+          document.body.style.overflow = 'hidden';
+        }
+      }
+
+      if (hamburgerBtn && mobileMenu) {
+        hamburgerBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          if (mobileMenu.classList.contains('open')) {
+            closeMobileMenu();
+          } else {
+            openMobileMenu();
+          }
+        });
+      }
+
+      if (closeMenuBtn) {
+        closeMenuBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          closeMobileMenu();
+        });
+      }
+
+      const mobileLinks = document.querySelectorAll('.mobile-menu a, .mobile-menu .btn-nav');
+      mobileLinks.forEach(link => {
+        link.addEventListener('click', function() {
+          closeMobileMenu();
+        });
+      });
+
+      if (mobileMenu) {
+        mobileMenu.addEventListener('click', function(e) {
+          if (e.target === mobileMenu || e.target.classList.contains('mobile-menu')) {
+            closeMobileMenu();
+          }
+        });
+      }
+
+      window.addEventListener('resize', function() {
+        if (window.innerWidth > 768 && mobileMenu && mobileMenu.classList.contains('open')) {
+          closeMobileMenu();
+        }
+      });
+    })();
+  </script>
+  <script src="chatbot.js"></script>
+  <!-- ========== NAVBAR DYNAMIQUE (navbar.js) ========== -->
+  <div id="navbar-placeholder"></div>
+  <script src="navbar.js"></script>
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
