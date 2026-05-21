@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover" />
+  <title>RM Clever — Clevr · Votre Copilote IA 360°</title>
+
+  <!-- Polices Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Sora:wght@700;800&family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  </style>
+</head>
+<body>
+
+  <!-- Placeholder pour la navbar injectée par navbar.js -->
+  <div id="navbar-placeholder"></div>
+
+  <!-- HERO SECTION avec hero.jpg en arrière-plan -->
+<section class="relative min-h-[600px] flex items-center pt-32 pb-20 px-6 lg:px-12 overflow-hidden" style="background-image: url('images/hero.jpg'); background-size: cover; background-position: center;">
+  <div class="absolute inset-0 bg-gradient-to-b from-black/80 to-black/60"></div>
+  <!-- Effet glow derrière le texte -->
+  <div class="absolute top-1/2 right-0 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl"></div>
+  <div class="relative z-10 max-w-7xl mx-auto w-full">
+    <div class="max-w-3xl">
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-500/20 border border-blue-400/30 mb-6">
+        <span class="relative flex h-2 w-2">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+        </span>
+        <span class="text-[11px] font-bold text-blue-300 uppercase tracking-wider">COPILOTE IA · CLEVR</span>
+      </div>
+      <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight mb-6">
+        Clevr, votre<br>
+        <span class="text-blue-400">copilote IA 360°</span>
+      </h1>
+      <p class="text-lg md:text-xl text-white/80 leading-relaxed max-w-2xl mb-8">
+        Manager virtuel intelligent, Clevr travaille main dans la main avec vous 24h/7. Analyse des données, recommandations prix, stratégie marketing, réservations — une expérience 360° inédite.
+      </p>
+      <div class="flex flex-wrap gap-4">
+        <button class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full font-bold transition-all shadow-lg shadow-blue-600/25">🤖 Rencontrer Clevr</button>
+        <button class="border border-white/30 hover:border-blue-400 text-white px-8 py-3 rounded-full font-bold transition-all">📹 Voir la démo</button>
+      </div>
+    </div>
+    <!-- Pas d'icône ni d'image à droite – vous pouvez en ajouter une plus tard -->
+  </div>
+</section>
+
+  <!-- MAIN CONTENT -->
+  <main class="py-20 px-6 lg:px-12">
+    <div class="max-w-7xl mx-auto">
+
+      <!-- Section intro Clevr -->
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <div class="inline-flex items-center gap-2 px-4 py-1 border border-blue-200 bg-white mb-8 mx-auto">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-600"></span>
+          </span>
+          <span class="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em]">VOTRE MANAGER VIRTUEL</span>
+        </div>
+        <h2 class="text-3xl md:text-5xl font-black tracking-tighter text-gray-900 mb-6">
+          Clevr travaille <span class="text-blue-600">avec vous, pas à votre place</span>
+        </h2>
+        <p class="text-gray-600 text-lg leading-relaxed">
+          Conçu pour assister le manager et le restaurateur, Clevr analyse, recommande et alerte. Il ne remplace pas l'humain : il le rend plus performant.
+        </p>
+      </div>
+
+      <!-- 4 piliers Clevr -->
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
+        <div class="feature-card bg-white rounded-2xl p-6 shadow-lg border border-gray-100 text-center">
+          <div class="feature-icon w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-chart-line text-white text-xl"></i></div>
+          <h3 class="font-bold mb-2">Analyse 360°</h3>
+          <p class="text-gray-500 text-sm">Clevr croise toutes vos données pour une vision complète</p>
+        </div>
+        <div class="feature-card bg-white rounded-2xl p-6 shadow-lg border border-gray-100 text-center">
+          <div class="feature-icon w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-tags text-white text-xl"></i></div>
+          <h3 class="font-bold mb-2">Prix dynamiques</h3>
+          <p class="text-gray-500 text-sm">Recommandations tarifaires en temps réel</p>
+        </div>
+        <div class="feature-card bg-white rounded-2xl p-6 shadow-lg border border-gray-100 text-center">
+          <div class="feature-icon w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-bullhorn text-white text-xl"></i></div>
+          <h3 class="font-bold mb-2">Marketing IA</h3>
+          <p class="text-gray-500 text-sm">Stratégies promotionnelles automatisées</p>
+        </div>
+        <div class="feature-card bg-white rounded-2xl p-6 shadow-lg border border-gray-100 text-center">
+          <div class="feature-icon w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-calendar-check text-white text-xl"></i></div>
+          <h3 class="font-bold mb-2">Réservations</h3>
+          <p class="text-gray-500 text-sm">Optimisation du planning et des créneaux</p>
+        </div>
+      </div>
+
+      <!-- Section 1: Collaboration Manager / Clevr -->
+      <div class="grid lg:grid-cols-2 gap-12 items-center mb-20">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-100 mb-4">
+            <span class="text-[10px] font-bold text-blue-600 uppercase tracking-wider">COLLABORATION HUMAIN + IA</span>
+          </div>
+          <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">Le manager reste aux commandes</h2>
+          <p class="text-gray-600 text-lg leading-relaxed mb-6">
+           Clevr est le premier assistant virtuel de Revenue Management spécialement conçu pour les restaurateurs.
+            Il ne se contente pas d’afficher des données : il analyse, anticipe, recommande et alerte en temps réel, comme un manager virtuel disponible jour et nuit. Clevr n'impose rien : il conseille. Chaque recommandation peut être acceptée, modifiée ou refusée. Le manager conserve la décision finale tout en bénéficiant d'une analyse data ultra-précise.
+          </p>
+          <ul class="space-y-3 mb-8">
+            <li class="flex items-center gap-3"><i class="fas fa-check-circle text-blue-600"></i><span class="text-gray-600">Recommandations argumentées par les données</span></li>
+            <li class="flex items-center gap-3"><i class="fas fa-check-circle text-blue-600"></i><span class="text-gray-600">Interface intuitive d'approbation</span></li>
+            <li class="flex items-center gap-3"><i class="fas fa-check-circle text-blue-600"></i><span class="text-gray-600">Historique des décisions tracé</span></li>
+          </ul>
+        </div>
+        <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-3xl p-8 text-center">
+          <div class="flex items-center justify-center gap-8 flex-wrap">
+            <div class="text-center">
+              <i class="fas fa-user-tie text-blue-600 text-5xl mb-2"></i>
+              <p class="font-bold">Manager</p>
+              <p class="text-xs text-gray-500">Décideur final</p>
+            </div>
+            <i class="fas fa-handshake text-gray-400 text-3xl"></i>
+            <div class="text-center">
+              <i class="fas fa-robot text-blue-500 text-5xl mb-2"></i>
+              <p class="font-bold">Clevr</p>
+              <p class="text-xs text-gray-500">Assistant stratégique</p>
+            </div>
+          </div>
+          <div class="mt-4 p-3 bg-white rounded-xl">
+            <p class="text-xs text-gray-600"><i class="fas fa-chart-simple mr-1 text-blue-500"></i> "Clevr suggère, vous validez — ensemble vous gagnez"</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Analyse données + Recommandations prix -->
+      <div class="grid lg:grid-cols-2 gap-12 items-center mb-20 flex-row-reverse">
+        <div class="order-last lg:order-first">
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-100 mb-4">
+            <span class="text-[10px] font-bold text-blue-600 uppercase tracking-wider">ANALYSE & PRICING</span>
+          </div>
+          <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">Des données aux décisions prix</h2>
+          <p class="text-gray-600 text-lg leading-relaxed mb-6">
+            Prévisions jusqu’à 14 jours : Clevr modélise votre historique de fréquentation, la météo, les jours fériés et les événements locaux.
+
+Visualisation claire : Graphiques et tendances pour anticiper les pics et les creux.
+
+Détection des opportunités de marge : Clevr identifie les moments où vous pouvez ajuster vos prix ou promotions.   Clevr analyse en continu vos ventes, la demande, la concurrence et les tendances du marché. Il vous alerte sur les opportunités d'ajustement tarifaire et simule l'impact avant application.
+          </p>
+          <div class="flex gap-4 flex-wrap">
+            <div class="bg-white border border-gray-200 rounded-xl p-4 flex-1 text-center"><div class="text-2xl font-bold text-green-600">+18%</div><div class="text-xs text-gray-500">CA généré par les ajustements prix</div></div>
+            <div class="bg-white border border-gray-200 rounded-xl p-4 flex-1 text-center"><div class="text-2xl font-bold text-blue-600">94%</div><div class="text-xs text-gray-500">précision des prévisions</div></div>
+          </div>
+        </div>
+        <div class="order-first lg:order-last">
+          <div class="data-visual rounded-3xl p-6 text-center">
+            <div class="bg-white rounded-2xl p-6 shadow-md">
+              <p class="font-bold text-gray-800 mb-4">Évolution des prix recommandée</p>
+              <canvas id="priceChart" width="400" height="200" style="max-height: 200px; width: 100%;"></canvas>
+              <div class="mt-3 p-2 bg-blue-50 rounded-lg"><p class="text-xs text-blue-700"><i class="fas fa-chart-line mr-1"></i> Recommandation Clevr : augmenter le prix du menu déjeuner de 2€ (+8% marge)</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: Marketing intelligent -->
+      <div class="grid lg:grid-cols-2 gap-12 items-center mb-20">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-100 mb-4">
+            <span class="text-[10px] font-bold text-blue-600 uppercase tracking-wider">MARKETING STRATÉGIQUE</span>
+          </div>
+          <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">Des campagnes ciblées générées par IA</h2>
+          <p class="text-gray-600 text-lg leading-relaxed mb-6">
+            Clevr identifie les périodes creuses et élabore automatiquement des stratégies promotionnelles. Segmentation client, canaux adaptés, messages personnalisés — il orchestre votre présence digitale
+            Identification des périodes creuses : Clevr détecte les plages horaires sous-occupées et déclenche automatiquement des campagnes publicitaires (Ads) ciblées.
+
+ROI mesuré : Suivez l’impact de chaque promotion (exemple : ROI x3,8).
+
+Personnalisation des offres : Clevr conçoit des promotions adaptées à votre clientèle sans sacrifier la rentabilité..
+          </p>
+          <ul class="space-y-3 mb-8">
+            <li class="flex items-center gap-3"><i class="fas fa-check-circle text-blue-600"></i><span class="text-gray-600">Promotions générées automatiquement</span></li>
+            <li class="flex items-center gap-3"><i class="fas fa-check-circle text-blue-600"></i><span class="text-gray-600">Ciblage client par comportement</span></li>
+            <li class="flex items-center gap-3"><i class="fas fa-check-circle text-blue-600"></i><span class="text-gray-600">ROI mesuré et optimisé en continu</span></li>
+          </ul>
+        </div>
+        <div class="data-visual rounded-3xl p-6 text-center">
+          <div class="bg-white rounded-2xl p-6 shadow-md">
+            <div class="grid grid-cols-2 gap-4">
+              <div class="text-center p-3 bg-green-50 rounded-xl"><i class="fas fa-chart-line text-green-500 text-2xl mb-1"></i><p class="text-lg font-bold text-green-600">x3.8</p><p class="text-[10px] text-gray-500">ROI moyen</p></div>
+              <div class="text-center p-3 bg-blue-50 rounded-xl"><i class="fas fa-clock text-blue-500 text-2xl mb-1"></i><p class="text-lg font-bold text-blue-600">14j</p><p class="text-[10px] text-gray-500">prévision creux</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 4: Réservations et expérience client 360 -->
+      <div class="grid lg:grid-cols-2 gap-12 items-center mb-20 flex-row-reverse">
+        <div class="order-last lg:order-first">
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-100 mb-4">
+            <span class="text-[10px] font-bold text-blue-600 uppercase tracking-wider">RÉSERVATIONS & CLIENT</span>
+          </div>
+          <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">Une expérience 360° pour vos clients</h2>
+          <p class="text-gray-600 text-lg leading-relaxed mb-6">
+            Clevr centralise les réservations venant de tous les canaux (site, Google, Instagram, appels). Il optimise le planning, gère les annulations et analyse le taux de transformation pour maximiser votre taux de remplissage
+            Bilan IA complet : Chaque mois, Clevr génère un rapport détaillé avec les actions menées et leurs impacts.
+
+Stratégies automatiques : Il vous propose des ajustements de prix, des plans d’effectifs ou des modifications de carte.
+
+A/B testing et traçabilité : Chaque modification est enregistrée pour mesurer précisément son effet.
+
+5. Gestion des plannings et des stocks
+Prévision du besoin en personnel : Clevr recommande le nombre de serveurs ou cuisiniers nécessaires en fonction de l’affluence prévue.
+
+Réduction du gaspillage : En anticipant la demande, vous ajustez vos commandes fournisseurs et limitez les pertes.
+
+6. Interface unifiée multi‑services
+Vision 360° : Clevr centralise tous vos services (petit-déjeuner, déjeuner, brunch, apéro, dîner, livraison).
+
+Comparaison de rentabilité : Identifiez quel service est le plus performant et lesquels nécessitent des ajustements.
+
+7. Disponibilité permanente (24/7)
+Copilote toujours actif : Clevr surveille vos indicateurs même lorsque vous dormez.
+
+Alertes prioritaires : Recevez des notifications critiques en cas de dérive immédiate (exemple : rupture de stock, hausse soudaine du coût matière)..
+          </p>
+          <div class="flex gap-4 flex-wrap">
+            <div class="bg-white border border-gray-200 rounded-xl p-3 flex-1 text-center"><i class="fas fa-globe text-blue-500 mb-1 block"></i><span class="text-xs font-bold">Multi-canaux</span></div>
+            <div class="bg-white border border-gray-200 rounded-xl p-3 flex-1 text-center"><i class="fas fa-chart-line text-blue-500 mb-1 block"></i><span class="text-xs font-bold">Taux occupation +23%</span></div>
+            <div class="bg-white border border-gray-200 rounded-xl p-3 flex-1 text-center"><i class="fas fa-clock text-blue-500 mb-1 block"></i><span class="text-xs font-bold">Gestion temps réel</span></div>
+          </div>
+        </div>
+        <div class="order-first lg:order-last">
+          <div class="data-visual rounded-3xl p-6 text-center">
+            <div class="bg-white rounded-2xl p-6 shadow-md">
+              <i class="fas fa-calendar-alt text-blue-500 text-4xl mb-3"></i>
+              <p class="font-bold text-gray-800">Taux d'occupation optimisé</p>
+              <canvas id="occupancyChart" width="400" height="150" style="max-height: 150px; width: 100%;"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 5: Clevr partout avec vous -->
+      <div class="bg-gradient-to-r from-blue-600 to-blue-800 rounded-3xl p-12 text-center text-white mb-12">
+        <i class="fas fa-robot text-5xl text-blue-300 mb-4 opacity-75"></i>
+        <h2 class="text-3xl md:text-4xl font-extrabold mb-4">Clevr est avec vous partout</h2>
+        <p class="text-xl text-blue-100 max-w-2xl mx-auto mb-8">Web, mobile, WhatsApp — Clevr vous accompagne où que vous soyez. Recevez ses conseils, posez-lui des questions, validez ses recommandations en un clic.</p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <div class="bg-white/20 px-6 py-3 rounded-full flex items-center gap-2"><i class="fab fa-chrome"></i><span>Web App</span></div>
+          <div class="bg-white/20 px-6 py-3 rounded-full flex items-center gap-2"><i class="fab fa-apple"></i><span>iOS</span></div>
+          <div class="bg-white/20 px-6 py-3 rounded-full flex items-center gap-2"><i class="fab fa-android"></i><span>Android</span></div>
+          <div class="bg-white/20 px-6 py-3 rounded-full flex items-center gap-2"><i class="fab fa-whatsapp"></i><span>WhatsApp</span></div>
+          <div class="bg-white/20 px-6 py-3 rounded-full flex items-center gap-2"><i class="fas fa-envelope"></i><span>Email</span></div>
+        </div>
+      </div>
+
+  
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+<footer class="bg-black text-white pt-20 pb-10 border-t border-white/10 w-full">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+      
+      <!-- Colonne 1 : Logo + description -->
+      <div class="space-y-6">
+        <div class="flex items-center gap-3">
+          <img src="images/clever.png" alt="RM Clever Logo" class="h-12 w-auto object-contain">
+          <span class="text-2xl font-bold tracking-tight"></span>
+        </div>
+        <p class="text-gray-400 text-sm leading-relaxed">La solution de Revenue Management par IA qui aide les restaurateurs à transformer leurs données en profits.</p>
+        <div class="flex gap-4">
+          <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#1e6fd9] transition-all"><i class="fab fa-linkedin-in text-gray-300 hover:text-white"></i></a>
+          <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#1e6fd9] transition-all"><i class="fab fa-instagram text-gray-300 hover:text-white"></i></a>
+          <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#1e6fd9] transition-all"><i class="fab fa-twitter text-gray-300 hover:text-white"></i></a>
+          <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#1e6fd9] transition-all"><i class="fab fa-facebook-f text-gray-300 hover:text-white"></i></a>
+        </div>
+      </div>
+
+      <!-- Colonne 2 : Navigation -->
+      <div>
+        <h4 class="text-lg font-bold mb-6 border-b border-white/10 pb-2 inline-block">Navigation</h4>
+        <ul class="space-y-4 text-gray-400 text-sm mt-4">
+          <li><a href="#" class="hover:text-[#1e6fd9] transition-colors">Accueil</a></li>
+          <li><a href="#" class="hover:text-[#1e6fd9] transition-colors">Fonctionnalités</a></li>
+          <li><a href="#" class="hover:text-[#1e6fd9] transition-colors">Notre Engagement</a></li>
+          <li><a href="#" class="hover:text-[#1e6fd9] transition-colors">Blog</a></li>
+        </ul>
+      </div>
+
+      <!-- Colonne 3 : Informations légales -->
+      <div>
+        <h4 class="text-lg font-bold mb-6 border-b border-white/10 pb-2 inline-block">Informations</h4>
+        <ul class="space-y-4 text-gray-400 text-sm mt-4">
+          <li><a href="#" class="hover:text-[#1e6fd9] transition-colors">Contact</a></li>
+          <li><a href="#" class="hover:text-[#1e6fd9] transition-colors">Confidentialité</a></li>
+          <li><a href="#" class="hover:text-[#1e6fd9] transition-colors">Mentions Légales</a></li>
+          <li><a href="#" class="hover:text-[#1e6fd9] transition-colors">CGU</a></li>
+        </ul>
+      </div>
+
+      <!-- Colonne 4 : Contact -->
+      <div>
+        <h4 class="text-lg font-bold mb-6 border-b border-white/10 pb-2 inline-block">Contact</h4>
+        <ul class="space-y-4 text-gray-400 text-sm mt-4">
+          <li class="flex items-center gap-2"><i class="fas fa-envelope text-[#1e6fd9] text-xs"></i><a href="mailto:contact@rmclever.ai" class="hover:text-white transition-colors">contact@rmclever.ai</a></li>
+          <li class="flex items-center gap-2"><i class="fas fa-phone text-[#1e6fd9] text-xs"></i><a href="tel:+2250748345939" class="hover:text-white transition-colors">+225 07 48 34 59 39</a></li>
+          <li class="flex items-center gap-2"><span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span><span class="text-gray-400 text-xs">Système Opérationnel</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Bas de footer -->
+    <div class="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-gray-500 text-[11px]">
+      <p>© 2025 RM Clever. Tous droits réservés.</p>
+      <div class="font-bold tracking-[0.2em] uppercase text-[10px]">Powered By <span class="text-white">Axiom Labs</span></div>
+    </div>
+  </div>
+</footer>
+
+  <!-- Fichier navbar.js externe -->
+  <script src="navbar.js"></script>
+
+  <script>
+    // Graphique prix
+    const priceCtx = document.getElementById('priceChart')?.getContext('2d');
+    if (priceCtx) {
+      new Chart(priceCtx, {
+        type: 'line',
+        data: { labels: ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4', 'Sem 5', 'Sem 6', 'Sem 7', 'Sem 8'], datasets: [{ label: 'Prix moyen (€)', data: [22, 22, 23, 24, 24, 25, 26, 26], borderColor: '#1A6BFF', backgroundColor: 'rgba(26,107,255,0.1)', fill: true, tension: 0.3 }] },
+        options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { display: false } } }
+      });
+    }
+
+    // Graphique occupation
+    const occCtx = document.getElementById('occupancyChart')?.getContext('2d');
+    if (occCtx) {
+      new Chart(occCtx, {
+        type: 'bar',
+        data: { labels: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'], datasets: [{ label: 'Taux occupation (%)', data: [45, 52, 38, 68, 85, 92, 78], backgroundColor: '#1A6BFF', borderRadius: 8 }] },
+        options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { display: false } } }
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+@media (max-width: 768px) {
+  /* Cache le conteneur du bouton qui pousse le menu */
+  .navbar__btn-container {
+    display: none !important;
+  }
+  
+  /* Ou bien plus simple : on garde juste le hamburger */
+  .navbar {
+    justify-content: space-between;
+  }
+  
+  .hamburger {
+    display: flex !important;
+    position: relative;
+    right: 0;
+  }
+}
+
+
+/* 12. RÉDUIT LE LOGO POUR LAISSER DE LA PLACE AU HAMBURGER */
+.navbar__logo-img {
+  max-width: 120px !important;
+  height: auto !important;
+}
+
+/* 13. AJUSTE LE CONTENEUR NAVBAR POUR BIEN RÉPARTIR L'ESPACE */
+.navbar {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding-left: 16px !important;
+  padding-right: 16px !important;
+}
+
+/* 14. GARANTIT QUE LE HAMBURGER EST BIEN VISIBLE À DROITE */
+.hamburger, #hamburgerBtn {
+  flex-shrink: 0 !important;
+  margin-left: auto !important;
+}
+
+/* ======================================== */
+/* GESTION DE LA TAILLE DU LOGO             */
+/* ======================================== */
+
+/* Desktop : logo plus grand */
+@media (min-width: 769px) {
+  .navbar__logo-img {
+    max-width: 450px !important;
+    height: auto !important;
+  }
+}
+
+/* Mobile : logo réduit pour laisser place au menu */
+@media (max-width: 768px) {
+  .navbar__logo-img {
+    max-width: 450px !important;
+    height: auto !important;
+  }
+}

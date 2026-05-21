@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover" />
+  <title>RM Clever — Stratégies & Promotions Intelligent</title>
+
+  <!-- Polices Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Sora:wght@700;800&family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <style>
+    /* ======================================== */
+    /* TAILLE DU LOGO - VERSION DESKTOP         */
+    /* ======================================== */
+    
+    .navbar__logo-img {
+      max-width: 200px !important;
+      height: auto !important;
+    }
+    
+    /* ======================================== */
+    /* CORRECTIONS UNIQUEMENT POUR MOBILE       */
+    /* ======================================== */
+    
+    @media (max-width: 768px) {
+      
+      /* 1. Empêche tout débordement */
+      html, body {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden !important;
+        position: relative;
+      }
+      
+      /* 2. Force toutes les images à être responsive */
+      img, canvas, svg, iframe, video {
+        max-width: 100% !important;
+        height: auto !important;
+      }
+      
+      /* 3. SUPPRIME LE BOUTON "ESSAYER GRATUITEMENT" DU DESKTOP */
+      .navbar__btn-container .btn-nav,
+      .navbar .btn-nav {
+        display: none !important;
+      }
+      
+      /* 4. RÉDUIT LE CONTENEUR DU BOUTON */
+      .navbar__btn-container {
+        margin: 0 !important;
+        padding: 0 !important;
+        gap: 0 !important;
+      }
+      
+      /* 5. FORCE LE HAMBURGER À DROITE */
+      .hamburger, #hamburgerBtn {
+        display: flex !important;
+        flex-shrink: 0 !important;
+        margin-left: auto !important;
+        position: relative !important;
+        right: 0 !important;
+        z-index: 3000 !important;
+      }
+      
+      /* 6. AJUSTE LE LOGO POUR MOBILE */
+      .navbar__logo-img {
+        max-width: 100px !important;
+        height: auto !important;
+        margin-left: 0 !important;
+      }
+      
+      /* 7. AJUSTE LA NAVBAR */
+      .navbar {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+      }
+      
+      /* 8. MENU MOBILE : FIGÉ ET STATIQUE */
+      .mobile-menu, #mobileMenu {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100vh !important;
+        background: #111111 !important;
+        z-index: 9999 !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        transform: translateY(-100%) !important;
+        transition: transform 0.4s ease-in-out !important;
+        will-change: transform !important;
+        backface-visibility: hidden !important;
+      }
+      
+      .mobile-menu.open, #mobileMenu.open {
+        transform: translateY(0) !important;
+      }
+    }
+    
+    /* ======================================== */
+    /* VERSION DESKTOP : CACHE LE MENU MOBILE   */
+    /* ======================================== */
+    
+    @media (min-width: 769px) {
+      .mobile-menu, #mobileMenu {
+        display: none !important;
+      }
+    }
+
+    /* Styles généraux */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --blue-primary: #1A6BFF;
+      --blue-dark: #0A3FA8;
+      --blue-light: #E8F0FF;
+      --text-white: #FFFFFF;
+      --text-light: rgba(255, 255, 255, 0.8);
+      --text-dark: #111111;
+      --font-heading: 'Sora', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+      --radius-btn: 50px;
+      --transition: 0.25s ease;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: #ffffff;
+      color: var(--text-dark);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* Navbar styles */
+    .navbar {
+      background: #111111;
+      padding: 0 40px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .navbar__logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+
+    .navbar__links {
+      display: flex;
+      list-style: none;
+      gap: 32px;
+      margin: 0;
+      padding: 0;
+    }
+
+    .navbar__links li {
+      list-style: none;
+    }
+
+    .navbar__links a {
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.75);
+      transition: color var(--transition);
+      text-decoration: none;
+    }
+
+    .navbar__links a:hover,
+    .navbar__links a.active {
+      color: var(--text-white);
+    }
+
+    .btn-nav {
+      background: var(--blue-primary);
+      color: var(--text-white);
+      font-family: var(--font-body);
+      font-size: 13.5px;
+      font-weight: 600;
+      padding: 10px 22px;
+      border-radius: var(--radius-btn);
+      border: none;
+      cursor: pointer;
+      transition: background var(--transition), transform var(--transition);
+      white-space: nowrap;
+    }
+
+    .btn-nav:hover {
+      background: var(--blue-dark);
+      transform: translateY(-1px);
+    }
+
+    /* Hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 30px;
+      height: 21px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      z-index: 3000;
+      position: relative;
+    }
+
+    .hamburger span {
+      width: 100%;
+      height: 3px;
+      background-color: white;
+      border-radius: 3px;
+      transition: all 0.3s ease;
+    }
+
+    .hamburger.open span:nth-child(1) {
+      transform: translateY(9px) rotate(45deg);
+    }
+
+    .hamburger.open span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .hamburger.open span:nth-child(3) {
+      transform: translateY(-9px) rotate(-45deg);
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 0 20px;
+      }
+      .navbar__links {
+        display: none;
+      }
+      .hamburger {
+        display: flex;
+      }
+    }
+
+    /* Cartes */
+    .stat-card {
+      transition: all 0.3s ease;
+    }
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.15);
+    }
+    .feature-icon {
+      background: linear-gradient(135deg, #1A6BFF 0%, #0A3FA8 100%);
+    }
+    .data-visual {
+      background: linear-gradient(135deg, #f5f7ff 0%, #e8f0ff 100%);
+    }
+    .promo-card {
+      transition: all 0.3s ease;
+    }
+    .promo-card:hover {
+      transform: translateY(-3px);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Placeholder pour la navbar injectée par navbar.js -->
+  <div id="navbar-placeholder"></div>
+
+  <!-- HERO SECTION avec image.jpg en arrière-plan -->
+  <section class="relative min-h-[550px] flex items-center pt-32 pb-20 px-6 lg:px-12" style="background-image: url('images/strategie.jpg'); background-size: cover; background-position: center;">
+    <div class="absolute inset-0 bg-gradient-to-b from-black/70 to-black/50"></div>
+    <div class="relative z-10 max-w-7xl mx-auto w-full">
+      <div class="max-w-3xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-500/20 border border-blue-400/30 mb-6">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+          </span>
+          <span class="text-[11px] font-bold text-blue-300 uppercase tracking-wider">SMART PROMOTIONS</span>
+        </div>
+        <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight mb-6">
+          Des stratégies et tendances qui<br>
+          <span class="text-blue-400">maximisent vos marges</span>
+        </h1>
+        <p class="text-lg md:text-xl text-white/80 leading-relaxed max-w-2xl mb-8">
+          Clever conçoit des promotions éprouvées et personnalisées pour remplir vos périodes creuses sans sacrifier votre rentabilité nette.
+        </p>
+        <div class="flex flex-wrap gap-4">
+          <button class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full font-bold transition-all shadow-lg shadow-blue-600/25">Déployer ma stratégie</button>
+          <button class="border border-white/30 hover:border-blue-400 text-white px-8 py-3 rounded-full font-bold transition-all">Voir les templates</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN CONTENT -->
+  <main class="py-20 px-6 lg:px-12">
+    <div class="max-w-7xl mx-auto">
+
+      <!-- Section intro -->
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">Des promotions intelligentes qui préservent vos marges</h2>
+        <p class="text-gray-600 text-lg leading-relaxed">Clever ne se contente pas de remplir vos périodes creuses : il conçoit des offres personnalisées qui maintiennent, voire améliorent, votre rentabilité nette. 
+          
+        </p>
+      </div>
+
+      <!-- 3 piliers -->
+      <div class="grid md:grid-cols-3 gap-8 mb-20">
+        <div class="stat-card bg-white rounded-2xl p-8 shadow-lg border border-gray-100 text-center">
+          <div class="feature-icon w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-5"><i class="fas fa-chart-line text-white text-2xl"></i></div>
+          <h3 class="text-xl font-bold mb-3">Promotions éprouvées</h3>
+          <p class="text-gray-500">Basées sur des milliers de campagnes réussies dans la restauration.</p>
+        </div>
+        <div class="stat-card bg-white rounded-2xl p-8 shadow-lg border border-gray-100 text-center">
+          <div class="feature-icon w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-5"><i class="fas fa-magic text-white text-2xl"></i></div>
+          <h3 class="text-xl font-bold mb-3">Personnalisées</h3>
+          <p class="text-gray-500">Adaptées à votre concept, votre carte et votre clientèle.</p>
+        </div>
+        <div class="stat-card bg-white rounded-2xl p-8 shadow-lg border border-gray-100 text-center">
+          <div class="feature-icon w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-5"><i class="fas fa-coins text-white text-2xl"></i></div>
+          <h3 class="text-xl font-bold mb-3">Rentabilité préservée</h3>
+          <p class="text-gray-500">Des offres conçues pour remplir sans casser vos prix.</p>
+        </div>
+      </div>
+
+      <!-- Section 1: Stratégies éprouvées -->
+      <div class="grid lg:grid-cols-2 gap-12 items-center mb-20">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-100 mb-4">
+            <span class="text-[10px] font-bold text-blue-600 uppercase tracking-wider">01 — STRATÉGIES PROUVÉES</span>
+          </div>
+          <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">Des promotions qui ont fait leurs preuves</h2>
+          <p class="text-gray-600 text-lg leading-relaxed mb-6">
+            Clever s'appuie sur une base de données de plus de 10 000 campagnes promotionnelles réussies dans la restauration. Chaque stratégie est analysée, optimisée et adaptée à votre contexte unique.
+            90 % des promotions en restauration sont des catastrophes. On brade, on casse les prix, on espère. Résultat : vous remplissez vos heures creuses… en perdant de l'argent sur chaque couvert.
+
+Clever ne fait pas ça. Parce qu'on a analysé 10 000 campagnes réussies. On sait ce qui marche. On sait ce qui tue. Et on adapte à VOUS.
+
+
+          </p>
+          <ul class="space-y-3 mb-8">
+            <li class="flex items-center gap-3"><i class="fas fa-check-circle text-blue-600"></i><span class="text-gray-600">+28% de CA en heures creuses en moyenne</span></li>
+            <li class="flex items-center gap-3"><i class="fas fa-check-circle text-blue-600"></i><span class="text-gray-600">Taux de conversion 3x supérieur aux promotions standards</span></li>
+            <li class="flex items-center gap-3"><i class="fas fa-check-circle text-blue-600"></i><span class="text-gray-600">Stratégies validées par l'IA prédictive</span></li>
+          </ul>
+        </div>
+        <div class="data-visual rounded-3xl p-6 text-center">
+          <div class="bg-white rounded-2xl p-6 shadow-md">
+            <p class="font-bold text-gray-800 mb-4">Impact des promotions Clever</p>
+            <canvas id="impactChart" width="400" height="200" style="max-height: 200px; width: 100%;"></canvas>
+            <div class="mt-3 flex justify-center gap-6 text-xs">
+              <span class="flex items-center gap-1"><span class="w-3 h-3 bg-blue-500 rounded-full"></span> Avant promotion</span>
+              <span class="flex items-center gap-1"><span class="w-3 h-3 bg-green-500 rounded-full"></span> Avec promotion Clever</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Personnalisation intelligente -->
+      <div class="grid lg:grid-cols-2 gap-12 items-center mb-20">
+        <div class="order-last lg:order-first">
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-100 mb-4">
+            <span class="text-[10px] font-bold text-blue-600 uppercase tracking-wider">02 — PERSONNALISATION</span>
+          </div>
+          <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">Des offres uniques pour chaque restaurant</h2>
+          <p class="text-gray-600 text-lg leading-relaxed mb-6">
+            Clever analyse votre concept, votre carte, vos prix et votre clientèle pour concevoir des promotions sur mesure. Chaque offre est calibrée pour maximiser l'attractivité sans éroder vos marges.
+            "La promo qui a marché chez le resto d'en face va probablement vous ruiner."
+
+Parce que votre concept n'est pas le sien. Votre carte non plus. Vos prix, votre quartier, votre clientèle… Tout est différent.
+
+Pourtant, 80 % des restaurateurs copient les promotions qu'ils voient ailleurs. Résultat : ils perdent de l'argent en pensant en gagner.
+          </p>
+          <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-5">
+            <div class="grid grid-cols-2 gap-3 text-center">
+              <div class="p-3 bg-white rounded-xl"><i class="fas fa-utensils text-blue-500 text-xl mb-1"></i><p class="text-xs font-medium">Type de cuisine</p><p class="text-xs text-gray-500">Italienne / Gastronomique</p></div>
+              <div class="p-3 bg-white rounded-xl"><i class="fas fa-chart-line text-blue-500 text-xl mb-1"></i><p class="text-xs font-medium">Ticket moyen</p><p class="text-xs text-gray-500">25-35€</p></div>
+              <div class="p-3 bg-white rounded-xl"><i class="fas fa-users text-blue-500 text-xl mb-1"></i><p class="text-xs font-medium">Clientèle cible</p><p class="text-xs text-gray-500">Familles / Couples</p></div>
+              <div class="p-3 bg-white rounded-xl"><i class="fas fa-calendar text-blue-500 text-xl mb-1"></i><p class="text-xs font-medium">Créneaux ciblés</p><p class="text-xs text-gray-500">Midis creux / Lundi</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="order-first lg:order-last">
+          <div class="data-visual rounded-3xl p-6 text-center">
+            <div class="bg-white rounded-2xl p-6 shadow-md">
+              <i class="fas fa-sliders-h text-blue-500 text-4xl mb-3"></i>
+              <p class="font-bold text-gray-800">Critères de personnalisation</p>
+              <div class="mt-4 space-y-3">
+                <div><div class="flex justify-between text-xs"><span>Concept</span><span class="text-blue-600">100%</span></div><div class="h-2 bg-gray-200 rounded-full"><div class="w-full h-full bg-blue-600 rounded-full"></div></div></div>
+                <div><div class="flex justify-between text-xs"><span>Ticket moyen</span><span class="text-blue-600">100%</span></div><div class="h-2 bg-gray-200 rounded-full"><div class="w-full h-full bg-blue-600 rounded-full"></div></div></div>
+                <div><div class="flex justify-between text-xs"><span>Historique ventes</span><span class="text-blue-600">100%</span></div><div class="h-2 bg-gray-200 rounded-full"><div class="w-full h-full bg-blue-600 rounded-full"></div></div></div>
+                <div><div class="flex justify-between text-xs"><span>Données concurrence</span><span class="text-blue-600">85%</span></div><div class="h-2 bg-gray-200 rounded-full"><div class="w-[85%] h-full bg-blue-600 rounded-full"></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: Exemples de promotions -->
+      <div class="mb-20">
+        <div class="text-center mb-10">
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-100 mb-4">
+            <span class="text-[10px] font-bold text-blue-600 uppercase tracking-wider">03 — EXEMPLES CONCRETS</span>
+          </div>
+          <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">Des promotions qui fonctionnent</h2>
+          <p class="text-gray-600 text-lg">Découvrez des exemples de stratégies générées par Clever pour différents types de restaurants.</p>
+        </div>
+        <div class="grid md:grid-cols-3 gap-6">
+          <div class="promo-card bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md">
+            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4"><i class="fas fa-wine-bottle text-green-600"></i></div>
+            <h3 class="font-bold text-lg mb-2">Happy Hour amélioré</h3>
+            <p class="text-gray-500 text-sm mb-3">Offre "Apéro + Planche" à prix doux sur les après-midis creux</p>
+            <div class="flex justify-between text-xs"><span class="text-green-600">+42% de CA</span><span class="text-gray-400">Marge préservée</span></div>
+          </div>
+          <div class="promo-card bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md">
+            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4"><i class="fas fa-pizza-slice text-blue-600"></i></div>
+            <h3 class="font-bold text-lg mb-2">Menu duo découverte</h3>
+            <p class="text-gray-500 text-sm mb-3">Deux plats + dessert pour deux, uniquement le midi en semaine</p>
+            <div class="flex justify-between text-xs"><span class="text-green-600">+35% de CA</span><span class="text-gray-400">Marge +2%</span></div>
+          </div>
+          <div class="promo-card bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md">
+            <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-4"><i class="fas fa-mug-hot text-purple-600"></i></div>
+            <h3 class="font-bold text-lg mb-2">Brunch d'affaires</h3>
+            <p class="text-gray-500 text-sm mb-3">Formule petit-déjeuner tardif pour télétravailleurs le mardi</p>
+            <div class="flex justify-between text-xs"><span class="text-green-600">+28% de CA</span><span class="text-gray-400">Marge +5%</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 4: Rentabilité préservée -->
+      <div class="grid lg:grid-cols-2 gap-12 items-center mb-20">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-100 mb-4">
+            <span class="text-[10px] font-bold text-blue-600 uppercase tracking-wider">04 — RENTABILITÉ PRÉSERVÉE</span>
+          </div>
+          <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">Remplir sans casser ses prix</h2>
+          <p class="text-gray-600 text-lg leading-relaxed mb-6">
+           "-20 % sur la carte, c'est la faillite en 18 mois."
+
+Vous remplissez vos heures creuses, c'est vrai. Mais à quel prix ? Vous formez vos clients à ne plus jamais payer le prix plein. Vous détruisez votre image. Vous habituez votre clientèle à la promo.
+
+Résultat : le jour où vous arrêtez la remise, ils ne viennent plus. Et vous êtes coincé.
+
+La vérité qui dérange sur les promotions "classiques"
+Ce qu'on vous vend	Ce qui se passe vraiment
+"Ça va remplir votre salle"	Oui, avec des clients qui ne reviendront JAMAIS au prix plein
+"Vous allez fidéliser"	Non, vous allez former des chasseurs de promos
+"C'est temporaire"	La baisse de marge, elle, est définitive
+"Vos concurrents le font"	Et vos concurrents, ils sont riches ou ils ferment ?
+Le piège : plus vous bradez, plus vous avez besoin de brader pour attirer. C'est une spirale. Et elle finit toujours mal.
+
+
+          </p>
+          <div class="flex gap-4 flex-wrap">
+            <div class="bg-white border border-gray-200 rounded-xl p-4 flex-1 min-w-[140px] shadow-sm">
+              <div class="text-2xl font-bold text-green-600">+8%</div>
+              <div class="text-xs text-gray-500">de marge nette moyenne</div>
+            </div>
+            <div class="bg-white border border-gray-200 rounded-xl p-4 flex-1 min-w-[140px] shadow-sm">
+              <div class="text-2xl font-bold text-blue-600">-15%</div>
+              <div class="text-xs text-gray-500">de remise moyenne vs marché</div>
+            </div>
+            <div class="bg-white border border-gray-200 rounded-xl p-4 flex-1 min-w-[140px] shadow-sm">
+              <div class="text-2xl font-bold text-orange-600">94%</div>
+              <div class="text-xs text-gray-500">clients fidélisés post-promo</div>
+            </div>
+          </div>
+        </div>
+        <div class="data-visual rounded-3xl p-6 text-center">
+          <div class="bg-white rounded-2xl p-6 shadow-md">
+            <i class="fas fa-chart-line text-blue-500 text-4xl mb-3"></i>
+            <p class="font-bold text-gray-800">Évolution marge nette</p>
+            <canvas id="marginChart" width="400" height="180" style="max-height: 180px; width: 100%;"></canvas>
+            <p class="text-xs text-gray-500 mt-2">Avant vs après déploiement des promotions Clever</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 5: Dashboard stratégique -->
+      <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-3xl p-8 mb-12">
+        <div class="text-center mb-6">
+          <h3 class="text-2xl font-bold text-gray-900">Votre tableau de bord stratégique</h3>
+          <p class="text-gray-600">Clever vous recommande automatiquement les meilleures promotions</p>
+        </div>
+        <div class="grid md:grid-cols-4 gap-4">
+          <div class="bg-white rounded-xl p-4 text-center">
+            <i class="fas fa-chart-line text-blue-500 text-xl mb-2"></i>
+            <p class="text-xs text-gray-500">Recommandation du jour</p>
+            <p class="text-sm font-bold">Happy Hour 17h-19h</p>
+            <span class="text-xs text-green-600">+42% potentiel</span>
+          </div>
+          <div class="bg-white rounded-xl p-4 text-center">
+            <i class="fas fa-calendar text-blue-500 text-xl mb-2"></i>
+            <p class="text-xs text-gray-500">Période cible</p>
+            <p class="text-sm font-bold">Mardi-Mercredi midi</p>
+            <span class="text-xs text-orange-600">Creux -35%</span>
+          </div>
+          <div class="bg-white rounded-xl p-4 text-center">
+            <i class="fas fa-percent text-blue-500 text-xl mb-2"></i>
+            <p class="text-xs text-gray-500">Remise recommandée</p>
+            <p class="text-sm font-bold">-15% sur entrées</p>
+            <span class="text-xs text-green-600">Impact marge: -4%</span>
+          </div>
+          <div class="bg-white rounded-xl p-4 text-center">
+            <i class="fas fa-chart-simple text-blue-500 text-xl mb-2"></i>
+            <p class="text-xs text-gray-500">ROI estimé</p>
+            <p class="text-sm font-bold">x3.2</p>
+            <span class="text-xs text-green-600">+2 500€ CA</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Témoignage -->
+      <div class="bg-gradient-to-r from-blue-600 to-blue-800 rounded-3xl p-12 text-center text-white">
+        <i class="fas fa-quote-right text-4xl text-blue-300 mb-4 opacity-50"></i>
+        <p class="text-xl md:text-2xl leading-relaxed max-w-3xl mx-auto mb-6">
+          "Les promotions Clever ont rempli mes lundis soirs, historiquement très creux. Résultat : +38% de CA sur cette tranche, sans toucher à mes prix habituels."
+        </p>
+        <p class="font-bold">— Marie Dubois, "Le Petit Bistrot"</p>
+        <div class="mt-8">
+          <button class="bg-white text-blue-700 px-8 py-3 rounded-full font-bold hover:bg-gray-100 transition-all shadow-lg">🎯 Déployer ma stratégie</button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+ <!-- FOOTER -->
+<footer class="bg-black text-white pt-20 pb-10 border-t border-white/10 w-full">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+      
+      <!-- Colonne 1 : Logo + description -->
+      <div class="space-y-6">
+        <div class="flex items-center gap-3">
+          <img src="images/clever.png" alt="RM Clever Logo" class="h-12 w-auto object-contain">
+          <span class="text-2xl font-bold tracking-tight"></span>
+        </div>
+        <p class="text-gray-400 text-sm leading-relaxed">La solution de Revenue Management par IA qui aide les restaurateurs à transformer leurs données en profits.</p>
+        <div class="flex gap-4">
+          <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#1e6fd9] transition-all"><i class="fab fa-linkedin-in text-gray-300 hover:text-white"></i></a>
+          <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#1e6fd9] transition-all"><i class="fab fa-instagram text-gray-300 hover:text-white"></i></a>
+          <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#1e6fd9] transition-all"><i class="fab fa-twitter text-gray-300 hover:text-white"></i></a>
+          <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#1e6fd9] transition-all"><i class="fab fa-facebook-f text-gray-300 hover:text-white"></i></a>
+        </div>
+      </div>
+
+      <!-- Colonne 2 : Navigation -->
+      <div>
+        <h4 class="text-lg font-bold mb-6 border-b border-white/10 pb-2 inline-block">Navigation</h4>
+        <ul class="space-y-4 text-gray-400 text-sm mt-4">
+          <li><a href="#" class="hover:text-[#1e6fd9] transition-colors">Accueil</a></li>
+          <li><a href="#" class="hover:text-[#1e6fd9] transition-colors">Fonctionnalités</a></li>
+          <li><a href="#" class="hover:text-[#1e6fd9] transition-colors">Notre Engagement</a></li>
+          <li><a href="#" class="hover:text-[#1e6fd9] transition-colors">Blog</a></li>
+        </ul>
+      </div>
+
+      <!-- Colonne 3 : Informations légales -->
+      <div>
+        <h4 class="text-lg font-bold mb-6 border-b border-white/10 pb-2 inline-block">Informations</h4>
+        <ul class="space-y-4 text-gray-400 text-sm mt-4">
+          <li><a href="#" class="hover:text-[#1e6fd9] transition-colors">Contact</a></li>
+          <li><a href="#" class="hover:text-[#1e6fd9] transition-colors">Confidentialité</a></li>
+          <li><a href="#" class="hover:text-[#1e6fd9] transition-colors">Mentions Légales</a></li>
+          <li><a href="#" class="hover:text-[#1e6fd9] transition-colors">CGU</a></li>
+        </ul>
+      </div>
+
+      <!-- Colonne 4 : Contact -->
+      <div>
+        <h4 class="text-lg font-bold mb-6 border-b border-white/10 pb-2 inline-block">Contact</h4>
+        <ul class="space-y-4 text-gray-400 text-sm mt-4">
+          <li class="flex items-center gap-2"><i class="fas fa-envelope text-[#1e6fd9] text-xs"></i><a href="mailto:contact@rmclever.ai" class="hover:text-white transition-colors">contact@rmclever.ai</a></li>
+          <li class="flex items-center gap-2"><i class="fas fa-phone text-[#1e6fd9] text-xs"></i><a href="tel:+2250748345939" class="hover:text-white transition-colors">+225 07 48 34 59 39</a></li>
+          <li class="flex items-center gap-2"><span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span><span class="text-gray-400 text-xs">Système Opérationnel</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Bas de footer -->
+    <div class="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-gray-500 text-[11px]">
+      <p>© 2025 RM Clever. Tous droits réservés.</p>
+      <div class="font-bold tracking-[0.2em] uppercase text-[10px]">Powered By <span class="text-white">Axiom Labs</span></div>
+    </div>
+  </div>
+</footer>
+ 
+
+
+
+
+  <!-- Fichier navbar.js externe -->
+  <script src="navbar.js"></script>
+
+  <script>
+    // GRAPHIQUE : Impact des promotions
+    const impactCtx = document.getElementById('impactChart')?.getContext('2d');
+    if (impactCtx) {
+      new Chart(impactCtx, {
+        type: 'bar',
+        data: { labels: ['CA heures creuses', 'Taux d\'occupation', 'Ticket moyen'], datasets: [{ label: 'Avant promotion', data: [100, 35, 28], backgroundColor: '#93C5FD', borderRadius: 8 }, { label: 'Avec promotion Clever', data: [148, 62, 32], backgroundColor: '#10B981', borderRadius: 8 }] },
+        options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'top', labels: { font: { size: 10 } } } } }
+      });
+    }
+
+    // GRAPHIQUE : Évolution marge
+    const marginCtx = document.getElementById('marginChart')?.getContext('2d');
+    if (marginCtx) {
+      new Chart(marginCtx, {
+        type: 'line',
+        data: { labels: ['Mois -3', 'Mois -2', 'Mois -1', 'Déploiement', 'Mois +1', 'Mois +2', 'Mois +3'], datasets: [{ label: 'Marge nette (%)', data: [62, 61, 60, 62, 65, 67, 68], borderColor: '#1A6BFF', backgroundColor: 'rgba(26,107,255,0.1)', fill: true, tension: 0.3 }] },
+        options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { display: false } }, scales: { y: { title: { display: true, text: 'Marge (%)' }, min: 55, max: 75 } } }
+      });
+    }
+  </script>
+</body>
+</html>

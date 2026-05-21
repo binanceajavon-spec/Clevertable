@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Diagnostic Voix IA</title>
+    <style>
+        body { font-family: sans-serif; padding: 40px; display: flex; gap: 20px; }
+        button { padding: 15px 25px; font-size: 16px; cursor: pointer; border: none; border-radius: 8px; color: white; font-weight: bold;}
+        #btn-native { background: #10B981; }
+        #btn-kokoro { background: #3B82F6; }
+        #log { margin-top: 30px; padding: 15px; background: #f1f5f9; border-radius: 8px; font-family: monospace; }
+    </style>
+</head>
+<body>
+
+    <button id="btn-native">1. Tester Voix Navigateur (Hors-ligne)</button>
+    <button id="btn-kokoro">2. Tester Voix Kokoro (API)</button>
+
+    <div id="log">En attente de test...</div>
+
+    <script>
+        const logEl = document.getElementById('log');
+        const log = (msg) => { logEl.innerHTML += `<br>> ${msg}`; console.log(msg); };
+
+        // Test 1 : L'API Native du navigateur (Doit fonctionner à 100% au clic)
+        document.getElementById('btn-native').addEventListener('click', () => {
+            log("Lancement Web Speech API...");
+            if (!window.speechSynthesis) return log("❌ Web Speech non supporté par votre navigateur.");
+            
+            const u = new SpeechSynthesisUtterance("Ceci est un test de la voix native de votre navigateur.");
+            u.lang = 'fr-FR';
+            window.speechSynthesis.speak(u);
+            log("✅ Voix native envoyée aux haut-parleurs.");
+        });
+
+        // Test 2 : L'API Kokoro
+        document.getElementById('btn-kokoro').addEventListener('click', async () => {
+            log("Appel de l'API Kokoro...");
+            const btn = document.getElementById('btn-kokoro');
+            btn.textContent = "Chargement...";
+            
+            try {
+                const response = await fetch('https://kokoro.jofw.org/v1/audio/speech', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        model: "kokoro",
+                        input: "L'API Kokoro fonctionne parfaitement.",
+                        voice: "ff_siwis",
+                        response_format: "mp3"
+                    })
+                });
+
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                
+                const blob = await response.blob();
+                const audio = new Audio(URL.createObjectURL(blob));
+                audio.play();
+                
+                log("✅ Audio Kokoro reçu et lu avec succès.");
+            } catch (err) {
+                log(`❌ Erreur Kokoro : ${err.message}. L'API bloque la requête ou est hors ligne.`);
+            } finally {
+                btn.textContent = "2. Tester Voix Kokoro (API)";
+            }
+        });
+    </script>
+</body>
+</html>
